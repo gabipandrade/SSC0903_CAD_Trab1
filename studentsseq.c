@@ -10,6 +10,8 @@ Integrantes do Grupo 5:
 - Lucas Fernando Witzel Camara Ferreira - 11800650
 - Matheus dos Santos Ines - 12546784
 - Rafael Cunha Bejes Learth - 13676367
+
+Codigo Sequencial: studentsseq.c
 *******************************************************************************/
 
 #include <stdio.h>
@@ -317,10 +319,11 @@ int main(void) {
         tempo_total += final_tempo - inicio_tempo;
     }
 
-    // Impressao das tabelas de resultados e do tempo medio de execucao
+    // ===============================================================================
+    // Impressao dos resultados e liberacao da memoria alocada. Finalizacao do codigo.
+    // ===============================================================================
     printTabelas(R, C, cidade_Dados, regiao_Dados, brasil_Dados, melhor_regiao, melhor_cidade_regiao, melhor_cidade, tempo_total);
     
-    // Liberacao da memoria alocada
     free(cidade_Dados);
     free(regiao_Dados);
     free(estudantes);
@@ -329,4 +332,3 @@ int main(void) {
 
     return 0;
 }
-
