@@ -80,7 +80,7 @@ Dados calcularDados(const double *valores, double *aux_vetor, int lim) {
     // =====================================================
     // Paralelisacao dos calculos de notas minimas e maximas
     // =====================================================
-    #pragma omp parallel for reduction(+:soma, soma_quadrados) reduction(min:min_valor) reduction(max:max_valor)
+    #pragma omp parallel for reduction(+:soma, soma_quadrados) private(atual_valor) reduction(min:min_valor) reduction(max:max_valor)
     for (int i = 0; i < lim; i++) {
         atual_valor = valores[i];
         if (atual_valor < min_valor) min_valor = atual_valor;
