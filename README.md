@@ -3,7 +3,9 @@ Projeto do primeiro trabalho da disciplina de Computação de Alto Desempenho da
 
 ## Execução
 Para compilar todos os códigos    : make all
+
 Para executar o código sequêncial : make run_seq
+
 Para executar o código paralelo   : make run_par
 
 ## Explicações
