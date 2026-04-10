@@ -1,5 +1,6 @@
 # SSC0903_CAD_Trab1
 Projeto do primeiro trabalho da disciplina de Computação de Alto Desempenho da USP São Carlos (1º semestre de 2026).
+
 Link do Relatório : https://docs.google.com/document/d/1xqlsDlWESUiaf_1bC5gHuGMjdURYWlP4gEs0OqhG6cE/edit?usp=sharing
 
 ## Execução
