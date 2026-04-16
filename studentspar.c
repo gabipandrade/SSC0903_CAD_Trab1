@@ -266,9 +266,11 @@ int main(void) {
 
     srand((unsigned int)seed);
 
-    // ============================================
-    // Alocacao de memoria para as tabelas de dados
-    // ============================================
+    omp_set_num_threads(T);
+
+    // ======================================================================
+    // Alocacao de memoria para as tabelas de dados e declaracao de variaveis
+    // ======================================================================
     Dados brasil_Dados;
 
     Dados *cidade_Dados = malloc((size_t) R * C * sizeof(*cidade_Dados));
@@ -301,25 +303,47 @@ int main(void) {
         return 1;
     }
 
-    /* (Esquecer esse bloco por enquanto)
-    double *aux_vetor = malloc((size_t) R * C * A * sizeof(*aux_vetor));
-    if (aux_vetor == NULL) {
-        fprintf(stderr, "Erro: memoria insuficiente para vetor auxiliar.\n");
+    double *aux_vetor_brasil = malloc((size_t) R * C * A * sizeof(*aux_vetor_brasil));
+    if (aux_vetor_brasil == NULL) {
+        fprintf(stderr, "Erro: memoria insuficiente para criar o vetor auxiliar de dados do Brasil.\n");
         free(cidade_Dados);
         free(regiao_Dados);
         free(estudantes);
         free(media);
         return 1;
     }
-    */
+
+    double **aux_vetor_regiao_threads = malloc((size_t) T * sizeof(*aux_vetor_regiao_threads));
+    if (aux_vetor_regiao_threads == NULL) {
+        fprintf(stderr, "Erro: memoria insuficiente para criar o vetor auxiliar de regiao para as threads.\n");
+        free(cidade_Dados);
+        free(regiao_Dados);
+        free(estudantes);
+        free(media);
+        free(aux_vetor_brasil);
+        return 1;
+    }
+
+    for (int i = 0; i < T; i++) {
+        aux_vetor_regiao_threads[i] = malloc((size_t) C * A * sizeof(**aux_vetor_regiao_threads));
+        if (aux_vetor_regiao_threads[i] == NULL) {
+            fprintf(stderr, "Erro: memoria insuficiente para criar o vetor de regiao para uma thread especifica.\n");
+            free(cidade_Dados);
+            free(regiao_Dados);
+            free(estudantes);
+            free(media);
+            free(aux_vetor_brasil);
+            for (int j = 0; j < i; j++) free(aux_vetor_regiao_threads[j]);
+            free(aux_vetor_regiao_threads);
+            return 1;
+        }
+    }
 
     double inicio_tempo, final_tempo, tempo_total = 0.0;
     int melhor_regiao, melhor_cidade, melhor_cidade_regiao;
 
     // Preenchendo a tabela de estudantes com notas pseudo-aleatorias
     gerarTabela(R, C, A, N, estudantes);
-    
-    omp_set_num_threads(T);
 
     // ===================================================================================
     // Loop principal para o calculo dos dados estatisticos e medicao do tempo de execucao
@@ -427,11 +451,12 @@ int main(void) {
 
         #pragma omp parallel 
         {
-            double aux_vetor_regiao[C * A];
+            int id_thread = omp_get_thread_num();
+            double *aux_regiao = aux_vetor_regiao_threads[id_thread];
 
             #pragma omp for
             for (int r = 0; r < R; r++) {
-                regiao_Dados[INDEX_1DIM(r)] = calcularDados(&media[(size_t) r * (C * A)], aux_vetor_regiao, C * A);
+                regiao_Dados[INDEX_1DIM(r)] = calcularDados(&media[(size_t) r * (C * A)], aux_regiao, C * A);
             }
         }
         
@@ -446,7 +471,6 @@ int main(void) {
         */
 
         // Calculo das estatisticas do Brasil
-        double aux_vetor_brasil[R * C * A];
         brasil_Dados = calcularDados(media, aux_vetor_brasil, R * C * A);
 
         melhor_regiao = 0;
@@ -484,7 +508,9 @@ int main(void) {
     free(regiao_Dados);
     free(estudantes);
     free(media);
-    //free(aux_vetor);
+    free(aux_vetor_brasil);
+    for (int i = 0; i < T; i++) free(aux_vetor_regiao_threads[i]);
+    free(aux_vetor_regiao_threads);
 
     return 0;
 }

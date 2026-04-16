@@ -263,9 +263,9 @@ int main(void) {
 
     srand((unsigned int)seed);
 
-    // ============================================
-    // Alocacao de memoria para as tabelas de dados
-    // ============================================
+    // ======================================================================
+    // Alocacao de memoria para as tabelas de dados e declaracao de variaveis
+    // ======================================================================
     Dados brasil_Dados;
 
     Dados *cidade_Dados = malloc((size_t) R * C * sizeof(*cidade_Dados));
@@ -308,7 +308,6 @@ int main(void) {
         return 1;
     }
 
-    double soma = 0;
     double inicio_tempo, final_tempo, tempo_total = 0.0;
     int melhor_regiao, melhor_cidade, melhor_cidade_regiao;
 
@@ -327,7 +326,7 @@ int main(void) {
         for (int r=0; r<R; r++) {
             for (int c=0; c<C; c++) {
                 for (int a=0; a<A; a++) {
-                    soma = 0;
+                    double soma = 0;
                     for (int n=0; n<N; n++) {
                         soma += estudantes[INDEX_4DIM(r, c, a, n)];
                     }
