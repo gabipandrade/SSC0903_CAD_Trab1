@@ -20,7 +20,7 @@ Codigo Paralelo: studentspar.c
 #include <omp.h>
 
 // Numero de repeticoes para o calculo do tempo medio
-#define NUM_REP 10
+#define NUM_REP 30
 
 // Optamos por tratar os arrays contendo os dados dos estudantes como estruturas 
 // unidimensionais para melhor desempenho. Por isso, foram criadas macros que facilitam 
@@ -457,9 +457,7 @@ int main(int argc, char *argv[]) {
 
                 #pragma omp section
                 {
-                    melhor_regiao = 0;
-                    melhor_cidade = 0;
-                    melhor_cidade_regiao = 0;
+                    melhor_regiao = 0; melhor_cidade = 0; melhor_cidade_regiao = 0;
 
                     for (int r=0; r<R; r++) {
                         if (regiao_Dados[r].media > regiao_Dados[melhor_regiao].media) {

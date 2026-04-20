@@ -20,7 +20,7 @@ Codigo Sequencial: studentsseq.c
 #include <omp.h>
 
 // Numero de repeticoes para o calculo do tempo medio
-#define NUM_REP 10
+#define NUM_REP 30
 
 // Optamos por tratar os arrays contendo os dados dos estudantes como estruturas 
 // unidimensionais para melhor desempenho. Por isso, foram criadas macros que facilitam 
@@ -282,9 +282,9 @@ int main(int argc, char *argv[]) {
 
     srand((unsigned int)seed);
 
-    // ======================================================================
-    // Alocacao de memoria para as tabelas de dados e declaracao de variaveis
-    // ======================================================================
+    // =====================================================
+    // Alocacao de memoria dinamica para as tabelas de dados
+    // =====================================================
     Dados brasil_Dados;
 
     Dados *cidade_Dados = malloc((size_t) R * C * sizeof(*cidade_Dados));
@@ -368,9 +368,7 @@ int main(int argc, char *argv[]) {
         // Calculo das estatisticas do Brasil
         brasil_Dados = calcularDados(media, aux_vetor, R * C * A);
 
-        melhor_regiao = 0;
-        melhor_cidade = 0;
-        melhor_cidade_regiao = 0;
+        melhor_regiao = 0; melhor_cidade = 0; melhor_cidade_regiao = 0;
 
         // Definicao das melhores Cidade e Regiao
         for (int r=0; r<R; r++) {
